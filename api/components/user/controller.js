@@ -21,6 +21,9 @@ module.exports = function (injectedStore) {
     if (Object.keys(data).length == 0) {
       throw new Error('No data was sent');
     }
+    if (!data.id) {
+      data.id = Math.floor(Math.random() * (100 - 1) + 1);
+    }
     return await injectedStore.upsert(TABLE, data);
   };
 
