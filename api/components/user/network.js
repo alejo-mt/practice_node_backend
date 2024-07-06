@@ -68,10 +68,14 @@ router.get('/:id', getById);
  */
 router.post('/', upsert);
 
-function list(req, res) {
-  const users = controller.list();
-  console.log('Getting users');
-  response.success(req, res, users, 200);
+async function list(req, res) {
+  try {
+    const users = await controller.list(req.body);
+    console.log('Getting user/s');
+    response.success(req, res, users, 200);
+  } catch (error) {
+    response.error(req, res, error.message, 404);
+  }
 }
 
 async function getById(req, res) {
@@ -87,13 +91,12 @@ async function getById(req, res) {
 
 async function upsert(req, res) {
   try {
-    const { body: data } = req;
-    console.log('data', data);
-    await controller.upsert(data);
+    const { body } = req;
+    await controller.upsert(body);
     console.log('Creating a user');
     response.success(req, res, 'created', 201);
   } catch (error) {
-    response.error(req, res, error.message, 404);
+    response.error(req, res, error.message, 400);
   }
 }
 

@@ -1,3 +1,5 @@
+const { nanoid } = require('nanoid');
+const auth = require('../auth/index.js');
 const TABLE = 'users';
 
 module.exports = function (injectedStore) {
@@ -5,8 +7,14 @@ module.exports = function (injectedStore) {
     injectedStore = require('../../../store/dummy.js');
   }
 
-  const list = () => {
-    return injectedStore.get(TABLE);
+  const list = async (payload) => {
+    let user;
+    if (Object.keys(payload).length != 0) {
+      user = await query(payload);
+    } else {
+      user = injectedStore.get(TABLE);
+    }
+    return user;
   };
 
   const getById = async (id) => {
@@ -17,14 +25,31 @@ module.exports = function (injectedStore) {
     return user;
   };
 
-  const upsert = async (data) => {
-    if (Object.keys(data).length == 0) {
+  const upsert = async (payload) => {
+    if (Object.keys(payload).length == 0) {
       throw new Error('No data was sent');
     }
-    if (!data.id) {
-      data.id = Math.floor(Math.random() * (100 - 1) + 1);
+    if (!payload.id) {
+      payload.id = nanoid();
     }
-    return await injectedStore.upsert(TABLE, data);
+
+    const newUser = {
+      id: payload.id,
+      username: payload.username,
+      name: payload.name,
+      age: payload.age,
+    };
+
+    await auth.upsert({
+      id: payload.id,
+      password: payload.password,
+    });
+
+    return await injectedStore.upsert(TABLE, newUser);
+  };
+
+  const query = async (params) => {
+    return await injectedStore.query(TABLE, params);
   };
 
   return {
