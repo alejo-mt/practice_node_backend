@@ -1,5 +1,6 @@
 const { nanoid } = require('nanoid');
-// Database
+
+// Dummy Database
 const db = {
   users: [
     { name: 'Paco', username: 'paquirri', id: nanoid(), age: 21 },
@@ -8,31 +9,44 @@ const db = {
 };
 
 // Database object methods
+
 const get = (table) => {
   return db[table];
 };
 
 const getById = async (table, id) => {
   const col = db[table];
-  return col.filter((item) => item.id == id)[0] || null;
+  return col.find((item) => item.id === id) || null;
 };
 
 const upsert = (table, payload) => {
   if (!db[table]) {
     db[table] = [];
   }
-  db[table].push(payload);
+
+  const index = db[table].findIndex((item) => item.id === payload.id);
+
+  if (index === -1) {
+    db[table].push(payload); // Insert new record
+  } else {
+    db[table][index] = payload; // Update existing record
+  }
+
   return true;
 };
 
 const remove = (table) => {
-  return true;
+  if (db[table]) {
+    db[table] = [];
+    return true;
+  }
+  return false;
 };
 
 const query = async (table, payload) => {
   const prop = Object.keys(payload)[0];
-  const result = db[table].find((item) => item[prop] == payload[prop]);
-  return result;
+  const result = db[table].filter((item) => item[prop] === payload[prop]);
+  return result || null;
 };
 
 module.exports = {
