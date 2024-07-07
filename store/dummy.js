@@ -1,11 +1,10 @@
 const { nanoid } = require('nanoid');
 
 // Dummy Database
+const ID = nanoid();
 const db = {
-  users: [
-    { name: 'Paco', username: 'paquirri', id: nanoid(), age: 21 },
-    { name: 'Alison', username: 'aliss', id: nanoid(), age: 23 },
-  ],
+  users: [{ name: 'Paco', username: 'paquirri', id: ID, age: 21 }],
+  auth: [{ username: 'paquirri', id: ID, password: 'admin123' }],
 };
 
 // Database object methods
@@ -45,8 +44,9 @@ const remove = (table) => {
 
 const query = async (table, payload) => {
   const prop = Object.keys(payload)[0];
-  const result = db[table].filter((item) => item[prop] === payload[prop]);
-  return result || null;
+  const result =
+    db[table].filter((item) => item[prop] === payload[prop]) || null;
+  return result;
 };
 
 module.exports = {

@@ -20,6 +20,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-jsdoc-swagger": "^1.8.0",
+    "jsonwebtoken": "^9.0.2",
     "nanoid": "^3.3.7"
   }
 }

@@ -1,10 +1,10 @@
 const { nanoid } = require('nanoid');
-const auth = require('../auth/index.js');
+const auth = require('../auth/index');
 const TABLE = 'users';
 
 module.exports = function (injectedStore) {
   if (!injectedStore) {
-    injectedStore = require('../../../store/dummy.js');
+    injectedStore = require('../../../store/dummy');
   }
 
   const list = async (payload) => {
@@ -44,6 +44,7 @@ module.exports = function (injectedStore) {
     await auth.upsert({
       id: payload.id,
       password: payload.password,
+      username: payload.username,
     });
 
     return await injectedStore.upsert(TABLE, newUserData);
