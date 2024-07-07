@@ -8,6 +8,7 @@ module.exports = function (injectedStore) {
   }
 
   const list = async (payload) => {
+    console.log('payload', payload);
     let user;
     if (Object.keys(payload).length != 0) {
       user = await query(payload);
@@ -33,7 +34,7 @@ module.exports = function (injectedStore) {
       payload.id = nanoid();
     }
 
-    const newUser = {
+    const newUserData = {
       id: payload.id,
       username: payload.username,
       name: payload.name,
@@ -45,16 +46,21 @@ module.exports = function (injectedStore) {
       password: payload.password,
     });
 
-    return await injectedStore.upsert(TABLE, newUser);
+    return await injectedStore.upsert(TABLE, newUserData);
   };
 
   const query = async (params) => {
     return await injectedStore.query(TABLE, params);
   };
 
+  const remove = async () => {
+    return await injectedStore.remove(TABLE);
+  };
+
   return {
     list,
     getById,
     upsert,
+    remove,
   };
 };
