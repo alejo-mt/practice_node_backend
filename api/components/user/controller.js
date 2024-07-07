@@ -50,8 +50,8 @@ module.exports = function (injectedStore) {
     return await injectedStore.upsert(TABLE, newUserData);
   };
 
-  const query = async (params) => {
-    return await injectedStore.query(TABLE, params);
+  const query = async (payload) => {
+    return await injectedStore.query(TABLE, payload);
   };
 
   const remove = async () => {

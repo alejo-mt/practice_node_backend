@@ -21,15 +21,15 @@ module.exports = function (injectedStore) {
     }
   };
 
-  const upsert = async (data) => {
-    if (Object.keys(data).length == 0) {
+  const upsert = async (payload) => {
+    if (Object.keys(payload).length == 0) {
       throw new Error('No data was sent');
     }
 
     const newAuth = {
-      id: data.id,
-      password: data.password,
-      username: data.username,
+      id: payload.id,
+      password: payload.password,
+      username: payload.username,
     };
 
     return await injectedStore.upsert(TABLE, newAuth);

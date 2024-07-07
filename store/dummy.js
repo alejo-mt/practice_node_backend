@@ -18,17 +18,17 @@ const getById = async (table, id) => {
   return col.find((item) => item.id === id) || null;
 };
 
-const upsert = (table, payload) => {
+const upsert = (table, data) => {
   if (!db[table]) {
     db[table] = [];
   }
 
-  const index = db[table].findIndex((item) => item.id === payload.id);
+  const index = db[table].findIndex((item) => item.id === data.id);
 
   if (index === -1) {
-    db[table].push(payload); // Insert new record
+    db[table].push(data); // Insert new record
   } else {
-    db[table][index] = payload; // Update existing record
+    db[table][index] = data; // Update existing record
   }
 
   return true;
@@ -42,10 +42,10 @@ const remove = (table) => {
   return false;
 };
 
-const query = async (table, payload) => {
-  const prop = Object.keys(payload)[0];
+const query = async (table, params) => {
+  const prop = Object.keys(params)[0];
   const result =
-    db[table].filter((item) => item[prop] === payload[prop]) || null;
+    db[table].filter((item) => item[prop] === params[prop]) || null;
   return result;
 };
 
